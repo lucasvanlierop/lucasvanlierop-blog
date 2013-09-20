@@ -1,4 +1,5 @@
 !!DRAFT!!
+=========
 
 How we merged an svn repo and a git fork of it back into one git repository
 ===========================================================================
@@ -28,7 +29,7 @@ Bringing the fork up to date
 ----------------------------
 Before starting the whole merge process it is important to make the fork up to date with the original so it contains all of the functionality of the original which makes merging it back later on a little easier.
 
-zExtracting the fork from the git 'mother' repo
+Extracting the fork from the git 'mother' repo
 ----------------------------------------------
 Since the fork was created in a subdir, this part of the clients repo needed to be extracted.
 Luckily this can be achieved by using git filter-branch, note that this command acts directly on the repo so it's cloned first. The following command will move all code in subdir/fork to the root of the project. ---prune-empty ensures that empty revisons (revisions that changed something outside this dir) are removed
