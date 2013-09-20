@@ -21,7 +21,9 @@ svn2git command: (see: https://github.com/nirvdrum/svn2git)
 
 <code>
 mkdir svn-to-git-converted-repo
+
 cd svn-to-git-converted-repo
+
 svn2git --verbose http://original-project.googlecode.com/svn
 </code>
 
@@ -35,7 +37,9 @@ Since the fork was created in a subdir, this part of the clients repo needed to 
 Luckily this can be achieved by using git filter-branch, note that this command acts directly on the repo so it's cloned first. The following command will move all code in subdir/fork to the root of the project. ---prune-empty ensures that empty revisons (revisions that changed something outside this dir) are removed
 <code>
 git clone mother-repo fork-export
+
 cd $fork export
+
 git filter-branch -f --subdirectory-filter subdir/fork --prune-empty -- --all
 </code>
 
@@ -50,7 +54,9 @@ The list of php files containing $Id$ tags is fed to sed (using xargs) does an i
 
 <code>
 # Remove all Svn id's (caused by using an svn export) to reduce the number of differences between OpenConext and OFFICIAL versions
+
 echo "Remove svn id's"
+
 git filter-branch -f --tree-filter "grep -rl '\$Id' --include=*.php | xargs sed -i s/\\\$Id[^\$]*\\\\$/\\\$Id\\\$/g > /dev/null 2>&1 || true" -- --all
 <code>
 
@@ -62,7 +68,9 @@ Note that 'orphan' means it is not based on any other branch in the repo.
 
 <code>
 git checkout --orphan forked-version
+
 git remote add -f fork-origin fork-export
+
 git pull fork-origin forked-version
 </code>
 
