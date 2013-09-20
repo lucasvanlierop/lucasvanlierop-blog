@@ -19,13 +19,11 @@ It was decided that the merged version should be on GitHub, so the first thing t
 to a git repo on github. I will not go to deep into this as this is already described quite well by other people. The simplest way to do this is to use svn2git, just created a dir and run the 
 svn2git command: (see: https://github.com/nirvdrum/svn2git)
 
-<code>
+```
 mkdir svn-to-git-converted-repo
-
 cd svn-to-git-converted-repo
-
 svn2git --verbose http://original-project.googlecode.com/svn
-</code>
+```
 
 Bringing the fork up to date
 ----------------------------
@@ -35,13 +33,11 @@ Extracting the fork from the git 'mother' repo
 ----------------------------------------------
 Since the fork was created in a subdir, this part of the clients repo needed to be extracted.
 Luckily this can be achieved by using git filter-branch, note that this command acts directly on the repo so it's cloned first. The following command will move all code in subdir/fork to the root of the project. ---prune-empty ensures that empty revisons (revisions that changed something outside this dir) are removed
-<code>
+```
 git clone mother-repo fork-export
-
 cd $fork export
-
 git filter-branch -f --subdirectory-filter subdir/fork --prune-empty -- --all
-</code>
+```
 
 Removing the svn id's from the code
 -----------------------------------
@@ -52,13 +48,11 @@ Once again it's git filter-branch to the rescue, it can perform an operation on 
 
 The list of php files containing $Id$ tags is fed to sed (using xargs) does an inline replacement to normalize the keywords to their non-expanded form. the 'or true' statement is needed to keep the tree filter going
 
-<code>
+```
 # Remove all Svn id's (caused by using an svn export) to reduce the number of differences between OpenConext and OFFICIAL versions
-
 echo "Remove svn id's"
-
 git filter-branch -f --tree-filter "grep -rl '\$Id' --include=*.php | xargs sed -i s/\\\$Id[^\$]*\\\\$/\\\$Id\\\$/g > /dev/null 2>&1 || true" -- --all
-<code>
+```
 
 Copy the forked version to the converted repo
 ---------------------------------------------
@@ -66,13 +60,11 @@ Now the forked code is cleaned from svn id's it's time to reintegrate the forked
 This is done by creating an so called 'orphan' branch in the repo, and pulling the forked code into this branch. 
 Note that 'orphan' means it is not based on any other branch in the repo. 
 
-<code>
+```
 git checkout --orphan forked-version
-
 git remote add -f fork-origin fork-export
-
 git pull fork-origin forked-version
-</code>
+```
 
 Add missing history to the fork
 -------------------------------
@@ -86,10 +78,9 @@ When the commit has been found the parent commit of the orphan branch needs to b
 
 @todo explanin commit order and ~1
 
-<code>
+```
 git rebase --onto d763def11c9275f86070da68e805e408dc8e637d 27a67401ecb9149ce9ede127bb5612e205fccd50~1
-</code>
-
+```
 
 Merge fork and original
 -----------------------
